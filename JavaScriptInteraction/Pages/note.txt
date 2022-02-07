@@ -1,0 +1,12 @@
+﻿- JS Isolation.
+- Load JS.
+- Call JS.
+- Use JS variable in C#.
+- Call C#.
+- Cancel long task JS.
+- Common mistake.
+- Speedup JS.
+- How to deal with big JS library.
+- Use script tag in Blazor.
+<script type="text/javascript" suppress-error="BL9992">
+https://github.com/dotnet/aspnetcore/issues/16218

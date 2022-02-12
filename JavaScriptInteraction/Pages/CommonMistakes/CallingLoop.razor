@@ -1,0 +1,30 @@
+﻿@page "/calling-loop"
+@inject IJSRuntime JS
+@implements IAsyncDisposable
+
+<h3>CallingLoop</h3>
+<button class="btn btn-outline-danger" type="button" @onclick="CallJSLoopAsync">Call JS Loop</button>
+
+@code {
+    public Lazy<IJSObjectReference> CommonMistakesModule = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        CommonMistakesModule = new(await JS.InvokeAsync<IJSObjectReference>("import", "./js/commonMistakes.js"));
+    }
+
+    [JSInvokable]
+    public async Task CallJSLoopAsync()
+    {
+        var csharpObject = DotNetObjectReference.Create(this);
+        await CommonMistakesModule.Value.InvokeVoidAsync("callCSharpLoop", csharpObject);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (CommonMistakesModule.IsValueCreated)
+        {
+            await CommonMistakesModule.Value.DisposeAsync();
+        }
+    }
+}

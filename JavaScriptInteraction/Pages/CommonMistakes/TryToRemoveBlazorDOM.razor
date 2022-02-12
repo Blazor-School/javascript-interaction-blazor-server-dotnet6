@@ -1,0 +1,37 @@
+﻿@page "/try-to-remove-blazor-dom"
+@inject IJSRuntime JS
+@implements IAsyncDisposable
+
+<h3>TryToRemoveBlazorDOM</h3>
+@if(ShowDOM)
+{
+    <div id="blazorschool">Hello Blazor School!</div>
+}
+
+<button class="btn btn-outline-success" type="button" @onclick="ToggleDOM">Toggle DOM (Blazor)</button>
+<button class="btn btn-outline-danger" type="button" @onclick="RemoveDOMByJSAsync">Remove DOM (JavaScript)</button>
+
+@code {
+    public bool ShowDOM { get; set; } = false;
+    public Lazy<IJSObjectReference> CommonMistakesModule = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        CommonMistakesModule = new(await JS.InvokeAsync<IJSObjectReference>("import", "./js/commonMistakes.js"));
+    }
+
+    public void ToggleDOM() => ShowDOM = !ShowDOM;
+
+    public async Task RemoveDOMByJSAsync()
+    {
+        await CommonMistakesModule.Value.InvokeVoidAsync("tryToRemoveBlazorDOM");
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (CommonMistakesModule.IsValueCreated)
+        {
+            await CommonMistakesModule.Value.DisposeAsync();
+        }
+    }
+}

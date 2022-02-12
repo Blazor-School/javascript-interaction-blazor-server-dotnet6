@@ -1,0 +1,37 @@
+﻿@page "/isolated-js"
+@inject IJSRuntime JS
+@implements IAsyncDisposable
+
+<h3>IsolatedJS</h3>
+<button class="btn btn-primary" @onclick="CallFromGlobalAsync">Call from global</button>
+<button class="btn btn-primary" @onclick="CallFromIsolatedAsync">Call from isolated</button>
+
+@code {
+    private Lazy<IJSObjectReference> IsolatedModule = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            IsolatedModule = new(await JS.InvokeAsync<IJSObjectReference>("import","./js/isolated.js"));
+        }
+    }
+
+    public async Task CallFromGlobalAsync()
+    {
+        await JS.InvokeVoidAsync("exampleFunction");
+    }
+
+    public async Task CallFromIsolatedAsync()
+    {
+        await IsolatedModule.Value.InvokeVoidAsync("exampleFunction");
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if(IsolatedModule.IsValueCreated)
+        {
+            await IsolatedModule.Value.DisposeAsync();
+        }
+    }
+}

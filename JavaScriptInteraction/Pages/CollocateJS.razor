@@ -1,0 +1,24 @@
+﻿@page "/collocate-js"
+@inject IJSRuntime JS
+@implements IAsyncDisposable
+
+<h3>CollocateJS</h3>
+
+@code {
+    private Lazy<IJSObjectReference> CollocateJsModule = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        CollocateJsModule = new(await JS.InvokeAsync<IJSObjectReference>("import", "./Pages/CollocateJS.razor.js"));
+        var instance = await CollocateJsModule.Value.InvokeAsync<IJSObjectReference>("CollocatedJsInstance");
+        await instance.InvokeVoidAsync("collocateFunction");
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (CollocateJsModule.IsValueCreated)
+        {
+            await CollocateJsModule.Value.DisposeAsync();
+        }
+    }
+}

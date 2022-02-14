@@ -1,4 +1,4 @@
-﻿@page "/collocate-js"
+﻿@page "/load-collocate-js"
 @inject IJSRuntime JS
 @implements IAsyncDisposable
 
@@ -9,7 +9,7 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        CollocateJsModule = new(await JS.InvokeAsync<IJSObjectReference>("import", "./Pages/CollocateJS.razor.js"));
+        CollocateJsModule = new(await JS.InvokeAsync<IJSObjectReference>("import", "./Pages/LoadOnDemand/CollocateJS.razor.js"));
         var instance = await CollocateJsModule.Value.InvokeAsync<IJSObjectReference>("CollocatedJsInstance");
         await instance.InvokeVoidAsync("collocateFunction");
     }

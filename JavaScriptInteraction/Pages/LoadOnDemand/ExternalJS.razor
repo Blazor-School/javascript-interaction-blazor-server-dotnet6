@@ -1,0 +1,26 @@
+﻿@page "/load-wwwroot-js"
+@inject IJSRuntime JS
+@implements IAsyncDisposable
+
+<h3>ExternalJS</h3>
+
+@code {
+    private Lazy<IJSObjectReference> ExampleModule = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            ExampleModule = new(await JS.InvokeAsync<IJSObjectReference>("import", "./js/exampleModule.js"));
+            await ExampleModule.Value.InvokeVoidAsync("exampleFunction2");
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if(ExampleModule.IsValueCreated)
+        {
+            await ExampleModule.Value.DisposeAsync();
+        }
+    }
+}

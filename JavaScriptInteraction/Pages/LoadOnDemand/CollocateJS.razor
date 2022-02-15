@@ -6,12 +6,13 @@
 
 @code {
     private Lazy<IJSObjectReference> CollocateJsModule = new();
+    private Lazy<IJSObjectReference> CollocateJsModuleInstance = new();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         CollocateJsModule = new(await JS.InvokeAsync<IJSObjectReference>("import", "./Pages/LoadOnDemand/CollocateJS.razor.js"));
-        var instance = await CollocateJsModule.Value.InvokeAsync<IJSObjectReference>("CollocatedJsInstance");
-        await instance.InvokeVoidAsync("collocateFunction");
+        CollocateJsModuleInstance = new(await CollocateJsModule.Value.InvokeAsync<IJSObjectReference>("CollocatedJsInstance"));
+        await CollocateJsModuleInstance.Value.InvokeVoidAsync("collocateFunction");
     }
 
     public async ValueTask DisposeAsync()
@@ -19,6 +20,7 @@
         if (CollocateJsModule.IsValueCreated)
         {
             await CollocateJsModule.Value.DisposeAsync();
+            await CollocateJsModuleInstance.Value.DisposeAsync();
         }
     }
 }

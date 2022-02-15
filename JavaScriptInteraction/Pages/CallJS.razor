@@ -16,6 +16,9 @@
     <div>
         <button class="btn btn-primary" @onclick="PassPrimitiveDataToFunctionAsync">Pass Primitive Data To Function</button>
     </div>
+</div>
+<div>
+    <button class="btn btn-primary" @onclick="PassObjectDataToFunctionAsync">Pass Object To Function</button>
     <div>
         <button class="btn btn-primary" @onclick="PassReferenceDataToFunctionAsync">Pass Reference To Function</button>
     </div>
@@ -39,19 +42,31 @@
         PredictableResult = await ExampleModule.Value.InvokeAsync<string>("predictableResult");
     }
 
+    public async Task PassObjectDataToFunctionAsync()
+    {
+        var instanceToPass = new ExampleClass()
+            {
+                ExampleString = "Blazor School",
+                ExampleInt = 100,
+                ExampleDate = DateTime.Now
+            };
+
+        await ExampleModule.Value.InvokeVoidAsync("methodWithObjectParameter", instanceToPass);
+    }
+
     public async Task PassReferenceDataToFunctionAsync()
     {
         var instanceToPass = new ExampleClass()
-        {
-            ExampleString="Blazor School",
-            ExampleInt = 100,
-            ExampleDate = DateTime.Now
-        };
+            {
+                ExampleString = "Blazor School",
+                ExampleInt = 100,
+                ExampleDate = DateTime.Now
+            };
 
         var wrappedInstance = DotNetObjectReference.Create<ExampleClass>(instanceToPass);
         await ExampleModule.Value.InvokeVoidAsync("methodWithReferenceParameter", wrappedInstance);
     }
-    
+
     public async Task PassPrimitiveDataToFunctionAsync()
     {
         await ExampleModule.Value.InvokeVoidAsync("methodWithPrimitiveParameters", "Blazor School", 5, DateTime.Now);

@@ -22,12 +22,17 @@ export function unpredictableResult()
 
 export function methodWithPrimitiveParameters(stringData, numberData, dateTimeData)
 {
-    alert(`Received: string ${stringData}, number ${numberData}, dateTime ${dateTimeData}`);
+    alert(`Received: string ${stringData}, number ${numberData}, date time ${dateTimeData}`);
 }
 
-export function methodWithReferenceParameter(csharpObject)
+export function methodWithReferenceParameter(csharpObjectReference)
 {
-    alert(`Received object not null? - ${csharpObject != null}`);
+    alert(`Received object not null? - ${csharpObjectReference != null}`);
+}
+
+export function methodWithObjectParameter(csharpObject)
+{
+    alert(`Received object data: string ${csharpObject.exampleString}, number ${csharpObject.exampleInt}, date time ${csharpObject.exampleDate}`);
 }
 
 export function callSynchronousCSharpMethod(csharpObject)

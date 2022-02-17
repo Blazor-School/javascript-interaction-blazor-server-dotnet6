@@ -15,6 +15,7 @@
 <button class="btn btn-primary" @onclick="HandlePrimitiveDataReturnMethod">Handle Primitive Data Return Method</button>
 <button class="btn btn-outline-danger" @onclick="HandleToupleDataReturnMethod">Handle Touple Data Return Method (Not Support)</button>
 <button class="btn btn-primary" @onclick="HandleReferenceDataReturnMethod">Handle Reference Data Return Method</button>
+
 @code {
     private Lazy<IJSObjectReference> ExampleModule = new();
     private static ExampleClass ExampleInstance { get; set; } = new()

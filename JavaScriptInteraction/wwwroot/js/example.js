@@ -40,9 +40,9 @@ export function callSynchronousCSharpMethod(csharpObject)
     csharpObject.invokeMethodAsync("ExampleVoidMethod");
 }
 
-export function callAsynchronousCSharpMethod(csharpObject)
+export async function callAsynchronousCSharpMethod(csharpObject)
 {
-    csharpObject.invokeMethodAsync("ExampleVoidMethodAsync");
+    await csharpObject.invokeMethodAsync("ExampleVoidMethodAsync");
 }
 
 export function callParameterizedCSharpMethod(csharpObject)

@@ -45,9 +45,20 @@ export async function callAsynchronousCSharpMethod(csharpObject)
     await csharpObject.invokeMethodAsync("ExampleVoidMethodAsync");
 }
 
-export function callParameterizedCSharpMethod(csharpObject)
+export function callPrimitiveParameterizedCSharpMethod(csharpObject)
 {
-    csharpObject.invokeMethodAsync("ExampleVoidMethodWithParameters", "Blazor School", 100, new Date());
+    csharpObject.invokeMethodAsync("MethodWithPrimitiveParameters", "Blazor School", 100, new Date());
+}
+
+export function callReferenceParameterizedCSharpMethod(csharpObject)
+{
+    let passingObject = {
+        exampleString: "Blazor School",
+        exampleInt: 9000,
+        exampleDate: new Date()
+    };
+
+    csharpObject.invokeMethodAsync("MethodWithReferenceParameters", passingObject);
 }
 
 export function callLocalComponentMethod(componentInstance)

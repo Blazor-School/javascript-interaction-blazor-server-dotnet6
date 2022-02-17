@@ -19,12 +19,20 @@ public class ExampleClass
         return Task.CompletedTask;
     }
 
-    [JSInvokable("ExampleVoidMethodWithParameters")]
-    public void ExampleParameterizedMethod(string exampleString, int exampleInt, DateTime exampleDate)
+    [JSInvokable("MethodWithPrimitiveParameters")]
+    public void ExamplePrimitiveParameterizedMethod(string exampleString, int exampleInt, DateTime exampleDate)
     {
         ExampleString = exampleString;
         ExampleInt = exampleInt;
         ExampleDate = exampleDate;
+    }
+    
+    [JSInvokable("MethodWithReferenceParameters")]
+    public void ExampleReferenceParameterizedMethod(ExampleClass instance)
+    {
+        ExampleString = instance.ExampleString;
+        ExampleInt = instance.ExampleInt;
+        ExampleDate = instance.ExampleDate;
     }
 
     [JSInvokable]

@@ -9,12 +9,20 @@
 <div>Date data: @ExampleInstance.ExampleDate</div>
 <button class="btn btn-primary" @onclick="CallSynchronousMethodAsync">Call Synchronous Method</button>
 <button class="btn btn-primary" @onclick="CallAsynchronousMethodAsync">Call Asynchronous Method</button>
-<button class="btn btn-primary" @onclick="CallStaticLocalMethodAsync">Call Local Static Method</button>
+<button class="btn btn-primary" onclick="callStaticLocalComponentMethod()">Call Local Static Method</button>
 <button class="btn btn-primary" @onclick="CallLocalComponentMethod">Call Local Component Method</button>
-<button class="btn btn-primary" @onclick="CallMethodWithParameters">Call Parameterized  Method</button>
+<button class="btn btn-primary" @onclick="CallMethodWithParameters">Call Parameterized Method</button>
+<button class="btn btn-primary" @onclick="HandlePrimitiveDataReturnMethod">Handle Primitive Data Return Method</button>
+<button class="btn btn-outline-danger" @onclick="HandleToupleDataReturnMethod">Handle Touple Data Return Method (Not Support)</button>
+<button class="btn btn-primary" @onclick="HandleReferenceDataReturnMethod">Handle Reference Data Return Method</button>
 @code {
     private Lazy<IJSObjectReference> ExampleModule = new();
-    private static ExampleClass ExampleInstance { get; set; } = new();
+    private static ExampleClass ExampleInstance { get; set; } = new()
+    {
+        ExampleDate = DateTime.Now,
+        ExampleInt = 100,
+        ExampleString = "Blazor School"
+    };
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -36,17 +44,12 @@
         await ExampleModule.Value.InvokeVoidAsync("callAsynchronousCSharpMethod", wrappedInstance);
     }
 
-    public async Task CallStaticLocalMethodAsync()
-    {
-        await ExampleModule.Value.InvokeVoidAsync("callStaticLocalComponentMethod");
-    }
-
     public async Task CallLocalComponentMethod()
     {
         var wrappedInstance = DotNetObjectReference.Create(this);
         await ExampleModule.Value.InvokeVoidAsync("callLocalComponentMethod", wrappedInstance);
     }
-    
+
     public async Task CallMethodWithParameters()
     {
         var wrappedInstance = DotNetObjectReference.Create(ExampleInstance);
@@ -60,9 +63,24 @@
     }
 
     [JSInvokable]
-    public static void LocalStaticMethod()
+    public static string LocalStaticMethod() => $"{nameof(LocalStaticMethod)} called";
+
+    public async Task HandlePrimitiveDataReturnMethod()
     {
-        ExampleInstance.ExampleString = $"{nameof(LocalStaticMethod)} called";
+        var wrappedInstance = DotNetObjectReference.Create(ExampleInstance);
+        await ExampleModule.Value.InvokeVoidAsync("callPrimitiveDataReturnMethod", wrappedInstance);
+    }
+
+    public async Task HandleToupleDataReturnMethod()
+    {
+        var wrappedInstance = DotNetObjectReference.Create(ExampleInstance);
+        await ExampleModule.Value.InvokeVoidAsync("callToupleDataReturnMethod", wrappedInstance);
+    }
+
+    public async Task HandleReferenceDataReturnMethod()
+    {
+        var wrappedInstance = DotNetObjectReference.Create(ExampleInstance);
+        await ExampleModule.Value.InvokeVoidAsync("callReferenceDataReturnMethod", wrappedInstance);
     }
 
     public async ValueTask DisposeAsync()

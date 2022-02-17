@@ -26,4 +26,13 @@ public class ExampleClass
         ExampleInt = exampleInt;
         ExampleDate = exampleDate;
     }
+
+    [JSInvokable]
+    public string ExamplePrimitiveReturnMethod() => ExampleString;
+
+    [JSInvokable]
+    public (string,int) ExampleToupleReturnMethod() => (ExampleString, ExampleInt);
+
+    [JSInvokable]
+    public ExampleClass ExampleReferenceReturnMethod() => this;
 }

@@ -55,7 +55,20 @@ export function callLocalComponentMethod(componentInstance)
     componentInstance.invokeMethodAsync("LocalMethod");
 }
 
-export function callStaticLocalComponentMethod()
+export async function callPrimitiveDataReturnMethod(csharpObject)
 {
-    DotNet.invokeMethodAsync("JavaScriptInteraction", "LocalStaticMethod");
+    let result = await csharpObject.invokeMethodAsync("ExamplePrimitiveReturnMethod");
+    alert(`The result is ${result}`);
+}
+
+export async function callToupleDataReturnMethod(csharpObject)
+{
+    let result = await csharpObject.invokeMethodAsync("ExampleToupleReturnMethod");
+    console.info(result);
+}
+
+export async function callReferenceDataReturnMethod(csharpObject)
+{
+    let result = await csharpObject.invokeMethodAsync("ExampleReferenceReturnMethod");
+    alert(`Received object data: string ${result.exampleString}, number ${result.exampleInt}, date time ${result.exampleDate}`)
 }
